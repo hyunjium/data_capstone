@@ -584,7 +584,7 @@
                                       </div>
                                       <div class="middle-box">
                                         <form id="upload-form" action="/upload" method="POST" enctype="multipart/form-data">
-                                          <button type="button" button data-v-a5f31c36 class="button primary large" id="change-button" id="select-button"> 변경하기</button>
+                                          <button type="button" button data-v-a5f31c36 class="button primary large" id="change-button"> 변경하기</button>
                                           <input type="submit" value="업로드" style="display: none;">
                                         </form>
                                         <img data-v-c980af24 src="https://cdn-icons-png.flaticon.com/512/4705/4705745.png" alt="Face Swapper Examples" class="desktop" width="200" height="200">
@@ -599,7 +599,7 @@
                                           <form id="upload-form" action="/upload" method="POST" enctype="multipart/form-data">
                                             <input type="file" id="file-input2" name="image" style="display: none;">
                                               <a href="#" id="download-link" download="downloaded_image.jpg" >
-                                                <button type="button" button data-v-a5f31c36 class="button primary large">다운로드</button>
+                                                <button type="button" id="download-button" button data-v-a5f31c36 class="button primary large">다운로드</button>
                                               </a>
                                             <input type="submit" value="업로드" style="display: none;">
                                         </form>
@@ -646,11 +646,11 @@
                 </div>
             </div>
         </section>
+
         <script>
             const fileInput = document.getElementById("file-input");
             const selectButton = document.getElementById("select-button");
             const uploadedImage = document.getElementById("uploaded-image");
-            //const downloadLink = document.getElementById("download-link");
     
             // 이미지 선택 버튼 클릭 이벤트 처리
             selectButton.addEventListener("click", function() {
@@ -666,39 +666,44 @@
                     // 이미지를 화면에 표시
                     uploadedImage.src = imageUrl;
                     uploadedImage.style.display = "block";
-    
-                    // // 다운로드 링크 활성화
-                    // downloadLink.href = imageUrl;
-                    // downloadLink.style.display = "block";
                 }
             });
         </script>
 
         <script>
-          const fileInput2 = document.getElementById("file-input2");
           const changeButton = document.getElementById("change-button");
+          const downloadButton = document.getElementById("download-button");
           const downloadedImage = document.getElementById("downloaded-image");
           const downloadLink = document.getElementById("download-link");
 
-          // 이미지 선택 버튼 클릭 이벤트 처리
+          // 미리 지정한 이미지 URL
+          const predefinedImageUrl = "https://maxst.icons8.com/vue-static/faceswapper/images/hero-images.png";
+
+          // "변경하기" 버튼 클릭 이벤트 처리
           changeButton.addEventListener("click", function() {
-            fileInput2.click();
+              downloadedImage.src = predefinedImageUrl;
+              downloadedImage.style.display = "block";
+              downloadButton.style.display = "block";
           });
 
-          // 파일 선택 이벤트 처리
-          fileInput2.addEventListener("change", function(event) {
-              if (fileInput2.files.length > 0) {
-                  const file = fileInput2.files[0];
-                  const imageUrl = URL.createObjectURL(file);
+          // 다운로드 버튼 클릭 이벤트 처리
+          downloadButton.addEventListener("click", function() {
+              const imageUrl = downloadedImage.src;
+              const imageFileName = "downloaded_image.jpg";
 
-                  // 이미지를 화면에 표시
-                  downloadedImage.src = imageUrl;
-                  downloadedImage.style.display = "block";
-
-                  // 다운로드 링크 활성화
-                  downloadLink.href = imageUrl;
-                  downloadLink.style.display = "block";
-              }
+              // 이미지를 Blob 객체로 변환
+              fetch(imageUrl)
+                  .then(response => response.blob())
+                  .then(blob => {
+                      // Blob을 파일로 저장
+                      const a = document.createElement("a");
+                      const url = window.URL.createObjectURL(blob);
+                      a.href = url;
+                      a.download = imageFileName;
+                      document.body.appendChild(a);
+                      a.click();
+                      window.URL.revokeObjectURL(url);
+                  });
           });
         </script>
     </body>
