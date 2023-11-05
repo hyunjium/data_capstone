@@ -584,7 +584,6 @@
                                       </div>
                                       <div class="middle-box">
                                         <form id="upload-form" action="/upload" method="POST" enctype="multipart/form-data">
-                                          <input type="file" id="file-input" name="image" style="display: none;">
                                           <button type="button" button data-v-a5f31c36 class="button primary large" id="change-button" id="select-button"> 변경하기</button>
                                           <input type="submit" value="업로드" style="display: none;">
                                         </form>
@@ -594,12 +593,12 @@
                                         <div data-v-157fc7ae class="fs-dropzone__wrapper">
                                           <div data-v-157fc7ae class="fs-dropzone__title product-text--small semi-bold">변경된 이미지를 확인하세요</div>
                                           <div id="image-container">
-                                            <img src="" id="uploaded-image" alt="Uploaded Image" style="display: none;">
+                                            <img src="" id="downloaded-image" alt="Downloaded Image" style="display: none;">
                                             <input data-v-157fc7ae type="file" accept=".jpg,.jpeg,.png,.webp">
                                           </div>
                                           <form id="upload-form" action="/upload" method="POST" enctype="multipart/form-data">
-                                            <input type="file" id="file-input" name="image" style="display: none;">
-                                              <a href="#" id="download-link" download="uploaded_image.jpg" >
+                                            <input type="file" id="file-input2" name="image" style="display: none;">
+                                              <a href="#" id="download-link" download="downloaded_image.jpg" >
                                                 <button type="button" button data-v-a5f31c36 class="button primary large">다운로드</button>
                                               </a>
                                             <input type="submit" value="업로드" style="display: none;">
@@ -651,7 +650,7 @@
             const fileInput = document.getElementById("file-input");
             const selectButton = document.getElementById("select-button");
             const uploadedImage = document.getElementById("uploaded-image");
-            const downloadLink = document.getElementById("download-link");
+            //const downloadLink = document.getElementById("download-link");
     
             // 이미지 선택 버튼 클릭 이벤트 처리
             selectButton.addEventListener("click", function() {
@@ -659,7 +658,7 @@
             });
     
             // 파일 선택 이벤트 처리
-            fileInput.addEventListener("change", function() {
+            fileInput.addEventListener("change", function(event) {
                 if (fileInput.files.length > 0) {
                     const file = fileInput.files[0];
                     const imageUrl = URL.createObjectURL(file);
@@ -668,11 +667,39 @@
                     uploadedImage.src = imageUrl;
                     uploadedImage.style.display = "block";
     
-                    // 다운로드 링크 활성화
-                    downloadLink.href = imageUrl;
-                    downloadLink.style.display = "block";
+                    // // 다운로드 링크 활성화
+                    // downloadLink.href = imageUrl;
+                    // downloadLink.style.display = "block";
                 }
             });
+        </script>
+
+        <script>
+          const fileInput2 = document.getElementById("file-input2");
+          const changeButton = document.getElementById("change-button");
+          const downloadedImage = document.getElementById("downloaded-image");
+          const downloadLink = document.getElementById("download-link");
+
+          // 이미지 선택 버튼 클릭 이벤트 처리
+          changeButton.addEventListener("click", function() {
+            fileInput2.click();
+          });
+
+          // 파일 선택 이벤트 처리
+          fileInput2.addEventListener("change", function(event) {
+              if (fileInput2.files.length > 0) {
+                  const file = fileInput2.files[0];
+                  const imageUrl = URL.createObjectURL(file);
+
+                  // 이미지를 화면에 표시
+                  downloadedImage.src = imageUrl;
+                  downloadedImage.style.display = "block";
+
+                  // 다운로드 링크 활성화
+                  downloadLink.href = imageUrl;
+                  downloadLink.style.display = "block";
+              }
+          });
         </script>
     </body>
 </html>
